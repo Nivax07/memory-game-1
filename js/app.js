@@ -4,22 +4,30 @@ var cards = [
 	'fa-diamond', 'fa-paper-plane-o', 'fa-anchor', 'fa-bolt',	'fa-cube', 'fa-leaf', 'fa-bicycle', 'fa-bomb'
 ];
 
-window.addEventListener('load', setupDeck); // Setup Deck when page loads
-document.getElementById('btnRestart').addEventListener('click', setupDeck); // Shuffle cards when restart clicked
+window.addEventListener('load', reset); // Setup Deck when page loads
+document.getElementById('btnRestart').addEventListener('click', reset); // Shuffle cards when restart clicked
 
 /**
- * Shuffles the deck and creates the rows of cards.
- * Resets game variables
+ * Resets the game completely
  */
-function setupDeck() {
-	clearInterval(timerInterval);
+function reset() {
 	matches = 0;
 	openedCards = [];
+	clearInterval(timerInterval);
 
+	document.getElementById('deck').innerHTML = '';
+	document.getElementById('timer').innerHTML = 0;
+	document.getElementById('moves').innerHTML = 0;
+
+	setupDeck();
+	startTimer();
+}
+
+/**
+ * Builds the deck
+ */
+function setupDeck() {
 	cards = shuffle(cards);
-
-	deck = document.getElementById('deck');
-	deck.innerHTML = '';
 
 	for(var i = 0; i < 16; i++) {
 		var card = document.createElement('li');
@@ -30,31 +38,42 @@ function setupDeck() {
 		item.className = 'fa ' + cards[i];
 
 		card.appendChild(item);
-		deck.appendChild(card);
+		document.getElementById('deck').appendChild(card);
 	}
-
-	startTimer();
 }
 
-function startTimer() {
-	timer = document.getElementById('timer');
-	timer.innerHTML = 0;
-
-	timerInterval = setInterval(function() {
-		timer.innerHTML = parseInt(timer.innerHTML) + 1;
-	}, 1000);
-}
-
+/**
+ * Reveals the tapped card for one second
+ *
+ * @param evt
+ */
 function cardTapped(evt) {
-	evt.classList.add('open');
-	evt.classList.add('show');
+	incrementMoves(); // Increment moves
 
-	openedCards
+	evt.classList.add('open'); // Open card
+	evt.classList.add('show'); // Show card
 
+	// Wait one second
 	setTimeout(function() {
-		evt.classList.remove('open');
-		evt.classList.remove('show');
+		evt.classList.remove('open'); // Close card
+		evt.classList.remove('show'); // Hide card
 	}, 1000);
+}
+
+/**
+ * Starts the timer
+ */
+function startTimer() {
+	timerInterval = setInterval(function() {
+		document.getElementById('timer').innerHTML = parseInt(document.getElementById('timer').innerHTML) + 1;
+	}, 1000);
+}
+
+/**
+ * Increments moves made by one
+ */
+function incrementMoves() {
+	document.getElementById('moves').innerHTML = parseInt(document.getElementById('moves').innerHTML) + 1;
 }
 
 /*
