@@ -1,4 +1,4 @@
-var openedCards, matches, timerInterval;
+var openedCards, matches, timerInterval, movesMade;
 var cards = [
 	'fa-diamond', 'fa-paper-plane-o', 'fa-anchor', 'fa-bolt', 'fa-cube', 'fa-leaf', 'fa-bicycle', 'fa-bomb',
 	'fa-diamond', 'fa-paper-plane-o', 'fa-anchor', 'fa-bolt',	'fa-cube', 'fa-leaf', 'fa-bicycle', 'fa-bomb'
@@ -12,6 +12,7 @@ document.getElementById('btnRestart').addEventListener('click', reset); // Shuff
  */
 function reset() {
 	matches = 0;
+	movesMade = 0;
 	openedCards = [];
 	clearInterval(timerInterval);
 
@@ -20,7 +21,6 @@ function reset() {
 	document.getElementById('moves').innerHTML = 0;
 
 	setupDeck();
-	startTimer();
 }
 
 /**
@@ -30,15 +30,18 @@ function setupDeck() {
 	cards = shuffle(cards);
 
 	for(var i = 0; i < 16; i++) {
+		// Create the card
 		var card = document.createElement('li');
-		card.className = 'card';
+		card.classList.add('card');
 		card.setAttribute('onclick', 'cardTapped(this)');
 
+		// Create the item
 		var item = document.createElement('i');
-		item.className = 'fa ' + cards[i];
+		item.classList.add('fa');
+		item.classList.add(cards[i]);
 
-		card.appendChild(item);
-		document.getElementById('deck').appendChild(card);
+		card.appendChild(item); // Append item to card
+		document.getElementById('deck').appendChild(card); // Append card to board
 	}
 }
 
@@ -73,17 +76,17 @@ function startTimer() {
  * Increments moves made by one
  */
 function incrementMoves() {
-	document.getElementById('moves').innerHTML = parseInt(document.getElementById('moves').innerHTML) + 1;
+	if(movesMade === 0) startTimer();
+	movesMade++;
+	document.getElementById('moves').innerHTML = movesMade;
 }
 
-/*
- * Display the cards on the page
- *   - shuffle the list of cards using the provided "shuffle" method below
- *   - loop through each card and create its HTML
- *   - add each card's HTML to the page
+/**
+ * This chunk of code should already look somewhat familiar :P
+ *
+ * @param array
+ * @returns {*}
  */
-
-// Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
     var currentIndex = array.length, temporaryValue, randomIndex;
 
