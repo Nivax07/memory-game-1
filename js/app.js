@@ -1,4 +1,4 @@
-var openedCards, matches, timerInterval, movesMade;
+var openedCard, matches, timerInterval, movesMade;
 var cards = [
 	'fa-diamond', 'fa-paper-plane-o', 'fa-anchor', 'fa-bolt', 'fa-cube', 'fa-leaf', 'fa-bicycle', 'fa-bomb',
 	'fa-diamond', 'fa-paper-plane-o', 'fa-anchor', 'fa-bolt',	'fa-cube', 'fa-leaf', 'fa-bicycle', 'fa-bomb'
@@ -13,7 +13,7 @@ document.getElementById('btnRestart').addEventListener('click', reset); // Shuff
 function reset() {
 	matches = 0;
 	movesMade = 0;
-	openedCards = [];
+	openedCard = null;
 	clearInterval(timerInterval);
 
 	document.getElementById('deck').innerHTML = '';
@@ -33,6 +33,8 @@ function setupDeck() {
 		// Create the card
 		var card = document.createElement('li');
 		card.classList.add('card');
+		card.setAttribute('id', i);
+		card.setAttribute('name', cards[i]);
 		card.setAttribute('onclick', 'cardTapped(this)');
 
 		// Create the item
@@ -56,11 +58,51 @@ function cardTapped(evt) {
 	evt.classList.add('open'); // Open card
 	evt.classList.add('show'); // Show card
 
-	// Wait one second
-	setTimeout(function() {
+	var item = {
+		id: evt.getAttribute('id'),
+		name: evt.getAttribute('name')
+	};
+
+	if(checkForMatch(item)) {
+		evt.classList.add('match');
+		openedCard.classList.add('match');
+		matches++;
+	} else openedCard = evt;
+
+	checkForWin();
+
+	setTimeout(function () {
 		evt.classList.remove('open'); // Close card
 		evt.classList.remove('show'); // Hide card
 	}, 1000);
+}
+
+function checkForWin() {
+	if(matches === 8) {
+		clearInterval(timerInterval);
+
+	}
+}
+
+/**
+ * Checks to see if the current open card matches the previous
+ * open card if it is still open. Both cards should have the 'open'
+ * class assigned to them.
+ *
+ * @param item
+ * @returns boolean
+ */
+function checkForMatch(item) {
+	if(!openedCard) return; // Return if first card
+
+	var card = {
+		id: openedCard.getAttribute('id'),
+		name: openedCard.getAttribute('name'),
+		isOpen: openedCard.classList.contains('open')
+	};
+
+	// Check if same name but different card and both are still open
+	return (item.name === card.name && item.id !== card.id && card.isOpen);
 }
 
 /**
