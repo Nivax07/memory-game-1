@@ -18,8 +18,8 @@ function reset() {
 	clearInterval(timerInterval);
 
 	document.getElementById('deck').innerHTML = '';
-	document.getElementById('timer').innerHTML = 0;
-	document.getElementById('moves').innerHTML = 0;
+	document.getElementById('timer').innerHTML = timer;
+	document.getElementById('moves').innerHTML = movesMade;
 
 	setupDeck();
 }
@@ -79,7 +79,7 @@ function cardTapped(evt) {
 		checkForWin();
 	} else openedCard = evt; // If didn't match, update selected card
 
-	setTimeout(function () {
+	setTimeout(() => {
 		evt.classList.remove('open'); // Close card
 		evt.classList.remove('show'); // Hide card
 	}, 1000);
@@ -120,7 +120,7 @@ function checkForMatch(item) {
  * Starts the timer
  */
 function startTimer() {
-	timerInterval = setInterval(function() {
+	timerInterval = setInterval(() => {
 		timer++;
 		document.getElementById('timer').innerHTML = timer;
 	}, 1000);
@@ -131,6 +131,7 @@ function startTimer() {
  */
 function incrementMoves() {
 	if(movesMade === 0) startTimer();
+
 	movesMade++;
 	document.getElementById('moves').innerHTML = movesMade;
 }
@@ -154,14 +155,3 @@ function shuffle(array) {
 
     return array;
 }
-
-/*
- * set up the event listener for a card. If a card is clicked:
- *  - display the card's symbol (put this functionality in another function that you call from this one)
- *  - add the card to a *list* of "open" cards (put this functionality in another function that you call from this one)
- *  - if the list already has another card, check to see if the two cards match
- *    + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
- *    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
- *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
- *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
- */
