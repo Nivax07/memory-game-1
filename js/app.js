@@ -1,5 +1,5 @@
-var openedCard, matches, timerInterval, movesMade;
-var cards = [
+let openedCard, matches, timer, timerInterval, movesMade;
+let cards = [
 	'fa-diamond', 'fa-paper-plane-o', 'fa-anchor', 'fa-bolt', 'fa-cube', 'fa-leaf', 'fa-bicycle', 'fa-bomb',
 	'fa-diamond', 'fa-paper-plane-o', 'fa-anchor', 'fa-bolt',	'fa-cube', 'fa-leaf', 'fa-bicycle', 'fa-bomb'
 ];
@@ -11,6 +11,7 @@ document.getElementById('btnRestart').addEventListener('click', reset); // Shuff
  * Resets the game completely
  */
 function reset() {
+	timer = 0;
 	matches = 0;
 	movesMade = 0;
 	openedCard = null;
@@ -29,16 +30,16 @@ function reset() {
 function setupDeck() {
 	cards = shuffle(cards);
 
-	for(var i = 0; i < 16; i++) {
+	for(let i = 0; i < 16; i++) {
 		// Create the card
-		var card = document.createElement('li');
+		let card = document.createElement('li');
 		card.classList.add('card');
 		card.setAttribute('id', i);
 		card.setAttribute('name', cards[i]);
 		card.setAttribute('onclick', 'cardTapped(this)');
 
 		// Create the item
-		var item = document.createElement('i');
+		let item = document.createElement('i');
 		item.classList.add('fa');
 		item.classList.add(cards[i]);
 
@@ -50,7 +51,7 @@ function setupDeck() {
 /**
  * Reveals the tapped card for one second
  *
- * @param evt
+ * @param evt - tapped card
  */
 function cardTapped(evt) {
 	incrementMoves(); // Increment moves
@@ -58,18 +59,25 @@ function cardTapped(evt) {
 	evt.classList.add('open'); // Open card
 	evt.classList.add('show'); // Show card
 
-	var item = {
+	let item = { // Object containing ID and name of selected card
 		id: evt.getAttribute('id'),
 		name: evt.getAttribute('name')
 	};
 
 	if(checkForMatch(item)) {
-		evt.classList.add('match');
-		openedCard.classList.add('match');
-		matches++;
-	} else openedCard = evt;
+		matches++; // Increments matches
 
-	checkForWin();
+		// Adds match class and removes event listener
+		evt.classList.add('match');
+		evt.removeAttribute('onclick');
+
+		// Adds match class and removes event listener
+		openedCard.classList.add('match');
+		openedCard.removeAttribute('onclick');
+
+		// Checks if user won
+		checkForWin();
+	} else openedCard = evt; // If didn't match, update selected card
 
 	setTimeout(function () {
 		evt.classList.remove('open'); // Close card
@@ -77,10 +85,13 @@ function cardTapped(evt) {
 	}, 1000);
 }
 
+/**
+ * Checks the number of recorded matches and determines if the user has won
+ */
 function checkForWin() {
 	if(matches === 8) {
 		clearInterval(timerInterval);
-
+		alert(`Congratulations! You won in ${timer} seconds and made ${movesMade} moves!`);
 	}
 }
 
@@ -90,12 +101,12 @@ function checkForWin() {
  * class assigned to them.
  *
  * @param item
- * @returns boolean
+ * @returns boolean - The cards matched
  */
 function checkForMatch(item) {
 	if(!openedCard) return; // Return if first card
 
-	var card = {
+	let card = {
 		id: openedCard.getAttribute('id'),
 		name: openedCard.getAttribute('name'),
 		isOpen: openedCard.classList.contains('open')
@@ -110,7 +121,8 @@ function checkForMatch(item) {
  */
 function startTimer() {
 	timerInterval = setInterval(function() {
-		document.getElementById('timer').innerHTML = parseInt(document.getElementById('timer').innerHTML) + 1;
+		timer++;
+		document.getElementById('timer').innerHTML = timer;
 	}, 1000);
 }
 
@@ -130,7 +142,7 @@ function incrementMoves() {
  * @returns {*}
  */
 function shuffle(array) {
-    var currentIndex = array.length, temporaryValue, randomIndex;
+    let currentIndex = array.length, temporaryValue, randomIndex;
 
     while (currentIndex !== 0) {
         randomIndex = Math.floor(Math.random() * currentIndex);
