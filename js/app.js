@@ -49,6 +49,9 @@ function setupDeck() {
 	}
 }
 
+/**
+ * Initial setup of the stars. Set their colour to reflect highlighted.
+ */
 function setupStars() {
 	starOne = document.getElementById('starOne');
 	starTwo = document.getElementById('starTwo');
@@ -143,14 +146,18 @@ function startTimer() {
 function incrementMoves() {
 	if(movesMade === 0) startTimer();
 
-	if(movesMade === 20) {
-		starThree.classList.remove('selected-star');
-	}
-	else if (movesMade === 35) {
-		starTwo.classList.remove('selected-star');
-	}
-	else if (movesMade === 50) {
-		starOne.classList.remove('selected-star');
+	switch(movesMade) {
+		case 20:
+			starThree.classList.remove('selected-star');
+			break;
+
+		case 35:
+			starTwo.classList.remove('selected-star');
+			break;
+
+		case 65:
+			starOne.classList.remove('selected-star');
+			break;
 	}
 
 	movesMade++;
