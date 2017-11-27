@@ -1,4 +1,4 @@
-let openedCard, matches, timer, timerInterval, movesMade;
+let openedCard, matches, timer, timerInterval, movesMade, starOne, starTwo, starThree;
 let cards = [
 	'fa-diamond', 'fa-paper-plane-o', 'fa-anchor', 'fa-bolt', 'fa-cube', 'fa-leaf', 'fa-bicycle', 'fa-bomb',
 	'fa-diamond', 'fa-paper-plane-o', 'fa-anchor', 'fa-bolt',	'fa-cube', 'fa-leaf', 'fa-bicycle', 'fa-bomb'
@@ -22,6 +22,7 @@ function reset() {
 	document.getElementById('moves').innerHTML = movesMade;
 
 	setupDeck();
+	setupStars();
 }
 
 /**
@@ -46,6 +47,16 @@ function setupDeck() {
 		card.appendChild(item); // Append item to card
 		document.getElementById('deck').appendChild(card); // Append card to board
 	}
+}
+
+function setupStars() {
+	starOne = document.getElementById('starOne');
+	starTwo = document.getElementById('starTwo');
+	starThree = document.getElementById('starThree');
+
+	starOne.classList.add('selected-star');
+	starTwo.classList.add('selected-star');
+	starThree.classList.add('selected-star');
 }
 
 /**
@@ -131,6 +142,16 @@ function startTimer() {
  */
 function incrementMoves() {
 	if(movesMade === 0) startTimer();
+
+	if(movesMade === 20) {
+		starThree.classList.remove('selected-star');
+	}
+	else if (movesMade === 35) {
+		starTwo.classList.remove('selected-star');
+	}
+	else if (movesMade === 50) {
+		starOne.classList.remove('selected-star');
+	}
 
 	movesMade++;
 	document.getElementById('moves').innerHTML = movesMade;
