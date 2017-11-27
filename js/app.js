@@ -1,8 +1,23 @@
-let openedCard, matches, timer, timerInterval, movesMade, starOne, starTwo, starThree;
+let openedCard, matches, timer, timerInterval, movesMade, modal, starOne, starTwo, starThree;
 let cards = [
 	'fa-diamond', 'fa-paper-plane-o', 'fa-anchor', 'fa-bolt', 'fa-cube', 'fa-leaf', 'fa-bicycle', 'fa-bomb',
 	'fa-diamond', 'fa-paper-plane-o', 'fa-anchor', 'fa-bolt',	'fa-cube', 'fa-leaf', 'fa-bicycle', 'fa-bomb'
 ];
+
+modal = document.getElementById('modal');
+starOne = document.getElementById('starOne');
+starTwo = document.getElementById('starTwo');
+starThree = document.getElementById('starThree');
+
+// Modal specific
+window.addEventListener('click', function(event) {
+	if (event.target === modal) modal.style.display = 'none';
+});
+
+// Modal specific
+document.getElementById('btnClose').addEventListener('click', function() {
+	modal.style.display = 'none';
+});
 
 window.addEventListener('load', reset); // Setup Deck when page loads
 document.getElementById('btnRestart').addEventListener('click', reset); // Shuffle cards when restart clicked
@@ -20,6 +35,8 @@ function reset() {
 	document.getElementById('deck').innerHTML = '';
 	document.getElementById('timer').innerHTML = timer;
 	document.getElementById('moves').innerHTML = movesMade;
+
+	if(modal.style.display !== 'none') modal.style.display = 'none';
 
 	setupDeck();
 	setupStars();
@@ -53,10 +70,6 @@ function setupDeck() {
  * Initial setup of the stars. Set their colour to reflect highlighted.
  */
 function setupStars() {
-	starOne = document.getElementById('starOne');
-	starTwo = document.getElementById('starTwo');
-	starThree = document.getElementById('starThree');
-
 	starOne.classList.add('selected-star');
 	starTwo.classList.add('selected-star');
 	starThree.classList.add('selected-star');
@@ -105,7 +118,8 @@ function cardTapped(evt) {
 function checkForWin() {
 	if(matches === 8) {
 		clearInterval(timerInterval);
-		alert(`Congratulations! You won in ${timer} seconds and made ${movesMade} moves!`);
+		document.getElementById('winMessage').innerHTML = `Congratulations! You won in ${timer} seconds and made ${movesMade} moves!`;
+		modal.style.display = 'block';
 	}
 }
 
