@@ -1,20 +1,29 @@
-# Memory Game Project
+# Memory Game
 
-## Table of Contents
+A memory game where cards are displayed on a board and when clicked, are turned around. Each card has an icon on it and only two cards will have the same 
+icon. The objective is to flip the corresponding cards resulting in a match, in as little time and as few moves as possible.
 
-* [Instructions](#instructions)
-* [Contributing](#contributing)
+## Getting Started
 
-## Instructions
-Change
-The starter project has some HTML and CSS styling to display a static version of the Memory Game project. You'll need to convert this project from a static project to an interactive one. This will require modifying the HTML and CSS files, but primarily the JavaScript file.
+Simply open the index.html in a web browser and enjoy.
 
-To get started, open `js/app.js` and start building out the app's functionality
+## Built With
 
-For specific, detailed instructions, look at the project instructions in the [Udacity Classroom](https://classroom.udacity.com/me).
+* [jQuery](https://jquery.com/) - jQuery used for some enhanced JS functionality
 
-## Contributing
+## Versioning
 
-This repository is the starter code for _all_ Udacity students. Therefore, we most likely will not accept pull requests.
+I use [SemVer](http://semver.org/) for versioning. 
 
-For details, check out [CONTRIBUTING.md](CONTRIBUTING.md).
+## Authors
+
+* **Alex Pickering** - *Initial work*
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+
+## Acknowledgments
+
+* [W3Schools](https://www.w3schools.com/) Some CSS tutorials
+* [CodePen](https://codepen.io/) Some jQuery inspiration

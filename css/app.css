@@ -259,6 +259,13 @@ pre {
     color: #FF912C;
 }
 
+.close:hover,
+.close:focus {
+    color: black;
+    cursor: pointer;
+    text-decoration: none;
+}
+
 .modal {
     top: 0;
     left: 0;
@@ -272,24 +279,17 @@ pre {
     background-color: rgba(0,0,0,0.4);
 }
 
-.modal-content {
-    width: 80%;
-    padding: 20px;
-    margin: 15% auto;
-    border: 1px solid #888;
-    background-color: #FEFEFE;
-}
-
-.close {
+#btnClose {
     color: #AAA;
     float: right;
     font-size: 28px;
     font-weight: bold;
 }
 
-.close:hover,
-.close:focus {
-    color: black;
-    cursor: pointer;
-    text-decoration: none;
+.modal > div {
+    width: 80%;
+    padding: 20px;
+    margin: 15% auto;
+    border: 2px solid #1D2888;
+    background-color: #FEFEFE;
 }
