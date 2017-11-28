@@ -1,4 +1,4 @@
-let openedCard, matches, timer, timerInterval, movesMade, modal, starOne, starTwo, starThree;
+let openedCard, matches, timer, timerInterval, movesMade, modal, starOne, starTwo, starThree, cardOne, cardTwo, rating;
 let cards = [
 	'fa-diamond', 'fa-paper-plane-o', 'fa-anchor', 'fa-bolt', 'fa-cube', 'fa-leaf', 'fa-bicycle', 'fa-bomb',
 	'fa-diamond', 'fa-paper-plane-o', 'fa-anchor', 'fa-bolt',	'fa-cube', 'fa-leaf', 'fa-bicycle', 'fa-bomb'
@@ -27,8 +27,11 @@ document.getElementById('btnRestart').addEventListener('click', reset); // Shuff
  */
 function reset() {
 	timer = 0;
+	rating = 3;
 	matches = 0;
 	movesMade = 0;
+	cardOne = null;
+	cardTwo = null;
 	openedCard = null;
 	clearInterval(timerInterval);
 
@@ -81,34 +84,74 @@ function setupStars() {
  * @param evt - tapped card
  */
 function cardTapped(evt) {
-	incrementMoves(); // Increment moves
-
 	evt.classList.add('open'); // Open card
 	evt.classList.add('show'); // Show card
 
-	let item = { // Object containing ID and name of selected card
-		id: evt.getAttribute('id'),
-		name: evt.getAttribute('name')
-	};
+	if(cardOne && cardTwo) {
+		cardOne.classList.remove('open'); // Close card
+		cardOne.classList.remove('show'); // Hide card
 
-	if(checkForMatch(item)) {
-		matches++; // Increments matches
+		cardTwo.classList.remove('open'); // Close card
+		cardTwo.classList.remove('show'); // Hide card
 
-		// Adds match class and removes event listener
-		evt.classList.add('match');
-		evt.removeAttribute('onclick');
+		cardOne = null;
+		cardTwo = null;
+	}
 
-		// Adds match class and removes event listener
-		openedCard.classList.add('match');
-		openedCard.removeAttribute('onclick');
+	if(!openedCard) {
+		openedCard = evt;
+	}
+	else {
+		incrementMoves(); // Increment moves
 
-		// Checks if user won
-		checkForWin();
-	} else openedCard = evt; // If didn't match, update selected card
+		let item = { // Object containing ID and name of selected card
+			id: evt.getAttribute('id'),
+			name: evt.getAttribute('name')
+		};
 
+		if(checkForMatch(item)) {
+			matches++; // Increments matches
+
+			// Adds match class and removes event listener
+			evt.classList.add('match');
+			evt.removeAttribute('onclick');
+
+			// Adds match class and removes event listener
+			openedCard.classList.add('match');
+			openedCard.removeAttribute('onclick');
+
+			// Checks if user won
+			checkForWin();
+		}
+
+		// Sets the current selected cards to global variables for easy selection elsewhere
+		cardOne = evt;
+		cardTwo = openedCard;
+
+		// Resets the openedCard variables
+		openedCard = null;
+
+		// Sets the turned over cards to reset
+		resetCards();
+	}
+}
+
+/**
+ * Hides the current two displayed cards after a second if another card is not clicked in the mean time
+ */
+function resetCards() {
 	setTimeout(() => {
-		evt.classList.remove('open'); // Close card
-		evt.classList.remove('show'); // Hide card
+		if(cardOne) {
+			cardOne.classList.remove('open'); // Close card
+			cardOne.classList.remove('show'); // Hide card
+			cardOne = null;
+		}
+
+		if(cardTwo) {
+			cardTwo.classList.remove('open'); // Close card
+			cardTwo.classList.remove('show'); // Hide card
+			cardTwo = null;
+		}
 	}, 1000);
 }
 
@@ -118,7 +161,7 @@ function cardTapped(evt) {
 function checkForWin() {
 	if(matches === 8) {
 		clearInterval(timerInterval);
-		document.getElementById('winMessage').innerHTML = `Congratulations! You won in ${timer} seconds and made ${movesMade} moves!`;
+		document.getElementById('winMessage').innerHTML = `Congratulations! You won in ${timer} seconds and made ${movesMade} moves! That was a ${rating} star performance!`;
 		modal.style.display = 'block';
 	}
 }
@@ -132,8 +175,6 @@ function checkForWin() {
  * @returns boolean - The cards matched
  */
 function checkForMatch(item) {
-	if(!openedCard) return; // Return if first card
-
 	let card = {
 		id: openedCard.getAttribute('id'),
 		name: openedCard.getAttribute('name'),
@@ -162,15 +203,13 @@ function incrementMoves() {
 
 	switch(movesMade) {
 		case 20:
+			rating--;
 			starThree.classList.remove('selected-star');
 			break;
 
 		case 35:
+			rating--;
 			starTwo.classList.remove('selected-star');
-			break;
-
-		case 65:
-			starOne.classList.remove('selected-star');
 			break;
 	}
 
